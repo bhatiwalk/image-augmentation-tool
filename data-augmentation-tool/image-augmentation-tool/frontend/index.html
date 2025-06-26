@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Augmentation Tool</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Navigation Bar -->
+        <div class="tool-nav">
+            <a href="home.html" class="nav-home">
+                <i class="fas fa-arrow-left"></i>
+                Back to Home
+            </a>
+            <div class="tool-title">
+                <i class="fas fa-magic"></i>
+                DataAug Pro Tool
+            </div>
+            <div class="profile-actions">
+                <button class="logout-btn" id="toolLogoutBtn">
+                    <i class="fas fa-sign-out-alt"></i>
+                    Logout
+                </button>
+            </div>
+        </div>
+
+        <header>
+            <h1>Data Augmentation Tool</h1>
+            <p class="subtitle">Upload images or folders to generate augmented datasets</p>
+        </header>
+        
+        <div class="main-content">
+            <!-- Input Panel -->
+            <div class="panel">
+                <h2 class="panel-title"><i class="fas fa-upload"></i> Upload Images</h2>
+                
+                <div class="upload-area" id="dropArea">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                    <h3>Drag & drop images here</h3>
+                    <p>or click the buttons below to select images or folders</p>
+                    <p class="upload-limits">No file count limit • 10MB per file • 10GB total</p>
+                    <button class="btn" id="uploadBtn"><i class="fas fa-folder-open"></i> Select Images/Folder</button>
+                    <input type="file" id="fileInput" class="file-input" accept="image/*" multiple>
+                    <input type="file" id="folderInput" class="file-input" webkitdirectory directory mozdirectory msdirectory odirectory>
+                </div>
+                
+                <div class="preview-container">
+                    <h3 class="preview-title">
+                        <i class="fas fa-images"></i> Input Images
+                        <span class="image-count" id="imageCount"></span>
+                    </h3>
+                    <div class="image-preview" id="inputPreview">
+                        <div class="placeholder">Images will appear here after selection</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Output Panel -->
+            <div class="panel">
+                <h2 class="panel-title"><i class="fas fa-download"></i> Augmented Output</h2>
+                
+                <div class="dropdown" id="transformDropdown">
+                    <button class="dropdown-btn" id="dropdownBtn">
+                        <span>Select augmentation types</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="dropdown-content">
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="flipHorizontal" checked>
+                            <label for="flipHorizontal">Horizontal Flip</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="flipVertical" checked>
+                            <label for="flipVertical">Vertical Flip</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="rotate90" checked>
+                            <label for="rotate90">Rotate 90°</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="rotate180" checked>
+                            <label for="rotate180">Rotate 180°</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="rotate270" checked>
+                            <label for="rotate270">Rotate 270°</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="brightness" checked>
+                            <label for="brightness">Brightness Adjustment</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="contrast" checked>
+                            <label for="contrast">Contrast Adjustment</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="blur" checked>
+                            <label for="blur">Gaussian Blur</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="noise" checked>
+                            <label for="noise">Add Noise</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="crop" checked>
+                            <label for="crop">Random Crop</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="preview-container">
+                    <h3 class="preview-title"><i class="fas fa-image"></i> Augmented Images</h3>
+                    <div class="image-preview" id="outputPreview">
+                        <div class="placeholder">Augmented images will appear here after processing</div>
+                    </div>
+                </div>
+                
+                <div class="action-buttons">
+                    <button class="btn btn-wide" id="processBtn"><i class="fas fa-cogs"></i> Generate Augmentations</button>
+                    <button class="btn btn-wide btn-secondary" id="downloadBtn" disabled><i class="fas fa-download"></i> Download All</button>
+                </div>
+                
+                <div class="status-indicator" id="statusIndicator">
+                    <div class="status-spinner"></div>
+                    <div>Generating augmented images...</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>Data Augmentation Tool | Generate diverse training datasets with ease</p>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DataAug Pro - Login</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary-blue: #4dabf7;
+            --primary-blue-dark: #339af0;
+            --accent-red: #b21f1f;
+            --dark-blue: #1a2a6c;
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--dark-blue), var(--accent-red), var(--dark-blue));
+            min-height: 100vh;
+            color: white;
+            overflow-x: hidden;
+        }
+
+        /* Animated background particles */
+        .bg-particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: rgba(77, 171, 247, 0.5);
+            border-radius: 50%;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); opacity: 0.5; }
+            50% { transform: translateY(-20px) rotate(180deg); opacity: 1; }
+        }
+
+        /* Auth Container */
+        .auth-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .auth-card {
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(15px);
+            border-radius: 20px;
+            padding: 40px;
+            width: 100%;
+            max-width: 500px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .auth-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .auth-logo {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: var(--primary-blue);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .auth-title {
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+        }
+
+        .auth-subtitle {
+            opacity: 0.8;
+            font-size: 1rem;
+        }
+
+        .auth-form .form-group {
+            margin-bottom: 25px;
+            position: relative;
+        }
+
+        .auth-form .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        /* 1. Make a tight wrapper around the input+icon */
+        .input-wrapper {
+            position: relative;
+            width: 100%;
+        }
+
+        .auth-form .form-control {
+            width: 100%;
+            padding: 12px 15px; /* Default padding */
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            color: white;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        /* 2. Give the input extra right-padding so the icon never overlaps text */
+        .input-wrapper .form-control {
+            padding-right: 45px;
+        }
+
+        .auth-form .form-control:focus {
+            outline: none;
+            border-color: var(--primary-blue);
+            background: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 0 0 3px rgba(77, 171, 247, 0.2);
+        }
+
+        /* 3. Center the icon inside that wrapper */
+        .input-wrapper .input-icon {
+            position: absolute;
+            top: 50%;                   /* midway down the input-wrapper */
+            right: 15px;                /* same inset you used for padding */
+            transform: translateY(-50%);
+            pointer-events: none;       /* so clicks go to the input */
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 1.1rem;
+            line-height: 1;
+        }
+
+        /* Password toggle specific styles */
+        .input-wrapper .input-icon.toggle {
+            pointer-events: auto;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .input-wrapper .input-icon.toggle:hover {
+            color: var(--primary-blue);
+        }
+
+        .remember-forgot {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .remember-me {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .remember-me input {
+            accent-color: var(--primary-blue);
+        }
+
+        .forgot-password {
+            color: var(--primary-blue);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .forgot-password:hover {
+            text-decoration: underline;
+            color: var(--primary-blue-dark);
+        }
+
+        .auth-btn {
+            width: 100%;
+            padding: 15px;
+            background: var(--primary-blue);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .auth-btn:hover {
+            background: var(--primary-blue-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(77, 171, 247, 0.3);
+        }
+
+        .auth-btn:active {
+            transform: translateY(0);
+        }
+
+        .divider {
+            display: flex;
+            align-items: center;
+            margin: 25px 0;
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.9rem;
+        }
+
+        .divider::before, .divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: rgba(255, 255, 255, 0.2);
+            margin: 0 10px;
+        }
+
+        .social-login {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .social-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .social-btn:hover {
+            background: var(--primary-blue);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(77, 171, 247, 0.3);
+        }
+
+        .auth-footer {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 0.95rem;
+        }
+
+        .auth-link {
+            color: var(--primary-blue);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .auth-link:hover {
+            text-decoration: underline;
+            color: var(--primary-blue-dark);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 600px) {
+            .auth-card {
+                padding: 30px 20px;
+            }
+            
+            .auth-logo {
+                font-size: 2rem;
+            }
+            
+            .auth-title {
+                font-size: 1.5rem;
+            }
+            
+            .auth-form .form-control {
+                padding: 10px 40px 10px 12px; /* Updated mobile padding */
+            }
+            
+            .input-icon {
+                right: 12px; /* Closer positioning for mobile */
+                font-size: 0.9rem; /* Slightly smaller on mobile */
+            }
+        }
+
+        @media (max-width: 400px) {
+            .remember-forgot {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+            
+            .social-login {
+                gap: 10px;
+            }
+            
+            .social-btn {
+                width: 45px;
+                height: 45px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Animated Background Particles -->
+    <div class="bg-particles" id="particles"></div>
+
+    <!-- Auth Container -->
+    <div class="auth-container">
+        <div class="auth-card">
+            <div class="auth-header">
+                <div class="auth-logo">
+                    <i class="fas fa-layer-group"></i>
+                    DataAug Pro
+                </div>
+                <h2 class="auth-title">Welcome Back</h2>
+                <p class="auth-subtitle">Sign in to access your account and continue your projects</p>
+            </div>
+            
+            <form class="auth-form">
+                <div class="form-group">
+                    <label for="email" class="form-label">Email Address</label>
+                    <div class="input-wrapper">
+                        <input type="email" id="email" class="form-control" placeholder="Enter your email" required>
+                        <span class="input-icon">
+                            <i class="fas fa-envelope"></i>
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="password" class="form-label">Password</label>
+                    <div class="input-wrapper">
+                        <input type="password" id="password" class="form-control" placeholder="Enter your password" required>
+                        <span class="input-icon toggle password-toggle" id="passwordToggle">
+                            <i class="fas fa-eye-slash"></i>
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="remember-forgot">
+                    <div class="remember-me">
+                        <input type="checkbox" id="remember">
+                        <label for="remember">Remember me</label>
+                    </div>
+                    <a href="#" class="forgot-password">Forgot password?</a>
+                </div>
+                
+                <button type="submit" class="auth-btn">
+                    <i class="fas fa-sign-in-alt"></i>
+                    Sign In
+                </button>
+                
+                <div class="divider">or continue with</div>
+                
+                <div class="social-login">
+                    <div class="social-btn" data-provider="google">
+                        <i class="fab fa-google"></i>
+                    </div>
+                    <div class="social-btn" data-provider="github">
+                        <i class="fab fa-github"></i>
+                    </div>
+                    <div class="social-btn" data-provider="facebook">
+                        <i class="fab fa-facebook-f"></i>
+                    </div>
+                    <div class="social-btn" data-provider="twitter">
+                        <i class="fab fa-twitter"></i>
+                    </div>
+                </div>
+                
+                <div class="auth-footer">
+                    Don't have an account? <a href="signup.html" class="auth-link">Sign up</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Create floating particles
+            function createParticles() {
+                const particlesContainer = document.getElementById('particles');
+                const particleCount = 30;
+                
+                for (let i = 0; i < particleCount; i++) {
+                    const particle = document.createElement('div');
+                    particle.className = 'particle';
+                    particle.style.left = Math.random() * 100 + '%';
+                    particle.style.top = Math.random() * 100 + '%';
+                    particle.style.animationDelay = Math.random() * 6 + 's';
+                    particle.style.animationDuration = (Math.random() * 3 + 3) + 's';
+                    particlesContainer.appendChild(particle);
+                }
+            }
+            
+            createParticles();
+            
+            // Password toggle functionality
+            const passwordToggle = document.getElementById('passwordToggle');
+            const passwordInput = document.getElementById('password');
+            
+            if (passwordToggle && passwordInput) {
+                passwordToggle.addEventListener('click', function() {
+                    const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                    passwordInput.setAttribute('type', type);
+                    
+                    // Toggle eye icon - find the icon inside the span
+                    const icon = this.querySelector('i');
+                    if (icon) {
+                        if (type === 'text') {
+                            icon.classList.remove('fa-eye-slash');
+                            icon.classList.add('fa-eye');
+                        } else {
+                            icon.classList.remove('fa-eye');
+                            icon.classList.add('fa-eye-slash');
+                        }
+                    }
+                });
+            }
+
+            // Form submission
+            const authForm = document.querySelector('.auth-form');
+            authForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                // Get form values
+                const email = document.getElementById('email').value;
+                const password = document.getElementById('password').value;
+                const remember = document.getElementById('remember').checked;
+                
+                // In a real app, you would validate and send to server here
+                console.log('Login attempt:', { email, password, remember });
+                
+                // Simulate successful login
+                setTimeout(() => {
+                    alert('Login successful! Redirecting to dashboard...');
+                    window.location.href = 'home.html'; // Redirect to main page
+                }, 1000);
+            });
+            
+            // Social login buttons
+            const socialBtns = document.querySelectorAll('.social-btn');
+            socialBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const provider = this.dataset.provider || 'unknown';
+                    alert(`Sign in with ${provider.charAt(0).toUpperCase() + provider.slice(1)} would be implemented here`);
+                });
+            });
+        });
+    </script>
+</body>
+</html>
